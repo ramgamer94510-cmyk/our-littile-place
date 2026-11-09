@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Little Place 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --pink:#ff6fa5;
+    --pink-deep:#e0457f;
+    --pink-soft:#ffd1e3;
+    --pink-mist:#fff0f6;
+    --white:#fffafc;
+    --black:#140a10;
+    --glow:rgba(255,111,165,.65);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Poppins',system-ui,sans-serif;
+    background:var(--white);
+    color:var(--black);
+    overflow-x:hidden;
+  }
+
+  /* thin pink scroll progress bar */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0;z-index:50;
+    background:linear-gradient(90deg,var(--pink-soft),var(--pink),var(--pink-deep));
+    box-shadow:0 0 12px var(--glow);
+  }
+
+  /* falling petals */
+  .petal{
+    position:fixed;top:-30px;z-index:1;pointer-events:none;
+    background:linear-gradient(135deg,var(--pink-soft),var(--pink));
+    border-radius:150% 0 150% 0;
+    opacity:.55;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    0%{transform:translate3d(0,-30px,0) rotate(0deg)}
+    100%{transform:translate3d(var(--drift,60px),110vh,0) rotate(540deg)}
+  }
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;min-height:100vh;min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px 22px 160px;
+    background:
+      radial-gradient(circle at 20% 15%,var(--pink-soft) 0,transparent 45%),
+      radial-gradient(circle at 85% 80%,#ffc2da 0,transparent 42%),
+      linear-gradient(180deg,var(--pink-mist),#ffe3ef);
+    overflow:hidden;
+  }
+  .blob{
+    position:absolute;border-radius:50%;filter:blur(50px);opacity:.55;
+    animation:floaty 9s ease-in-out infinite;
+  }
+  .blob.b1{width:260px;height:260px;background:var(--pink);top:8%;left:-60px}
+  .blob.b2{width:220px;height:220px;background:#fff;bottom:20%;right:-40px;animation-delay:-3s}
+  .blob.b3{width:160px;height:160px;background:var(--pink-deep);top:55%;left:35%;opacity:.25;animation-delay:-6s}
+  @keyframes floaty{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-35px)}}
+
+  .kicker{
+    position:relative;z-index:2;
+    font-size:.8rem;letter-spacing:.4em;text-transform:uppercase;
+    color:var(--pink-deep);margin-bottom:26px;
+  }
+  .hero-line{
+    position:relative;z-index:2;
+    font-family:'Playfair Display',Georgia,serif;
+    font-weight:500;font-size:clamp(1.9rem,5.6vw,3.7rem);line-height:1.3;
+    max-width:900px;min-height:3.9em;
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .6s ease;
+    color:var(--black);
+    text-shadow:0 0 28px rgba(255,111,165,.45);
+  }
+  .hero-line.fade{opacity:0}
+  .word{display:inline-block;white-space:nowrap}
+  .wave{display:inline-block;animation:wave 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .07s)}
+  @keyframes wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+
+  .start-btn{
+    position:relative;z-index:2;margin-top:42px;
+    font:500 1rem 'Poppins',sans-serif;letter-spacing:.12em;text-transform:lowercase;
+    color:#fff;border:none;cursor:pointer;
+    padding:15px 40px;border-radius:999px;
+    background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+    box-shadow:0 0 0 0 var(--glow),0 10px 28px rgba(224,69,127,.35);
+    animation:pulse 2.4s ease-in-out infinite;
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  .start-btn:hover{transform:scale(1.1);box-shadow:0 0 34px 8px var(--glow)}
+  .start-btn:active{transform:scale(.97)}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(255,111,165,.55),0 10px 28px rgba(224,69,127,.35)}
+    70%{box-shadow:0 0 0 22px rgba(255,111,165,0),0 10px 28px rgba(224,69,127,.35)}
+    100%{box-shadow:0 0 0 0 rgba(255,111,165,0),0 10px 28px rgba(224,69,127,.35)}
+  }
+
+  .waves{position:absolute;left:0;bottom:-1px;width:100%;height:130px;overflow:hidden;z-index:2}
+  .waves svg{position:absolute;bottom:0;left:0;width:200%;height:100%}
+  .waves .w1{animation:slideWave 14s linear infinite;opacity:.55}
+  .waves .w2{animation:slideWave 9s linear infinite reverse;opacity:.8}
+  .waves .w3{animation:slideWave 20s linear infinite}
+  @keyframes slideWave{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ================= MEMORIES ================= */
+  .memories{
+    position:relative;z-index:2;
+    background:var(--white);
+    padding:60px 20px 40px;
+  }
+  .section-title{text-align:center;margin-bottom:70px}
+  .section-title h2{
+    font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;
+  }
+  .section-title h2 span{color:var(--pink-deep);font-style:italic}
+  .section-title p{margin-top:10px;font-weight:300;color:#6b4a58;font-size:.95rem}
+
+  .timeline{position:relative;max-width:1080px;margin:0 auto}
+  .timeline::before{
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:0;
+    border-left:2px dashed var(--pink-soft);transform:translateX(-50%);
+  }
+
+  .memory{
+    position:relative;display:flex;margin:0 0 80px;
+  }
+  .memory.left{justify-content:flex-start}
+  .memory.right{justify-content:flex-end}
+
+  /* glowing dot on the center line */
+  .memory .dot{
+    position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
+    background:var(--pink);transform:translate(-50%,-50%) scale(0);
+    box-shadow:0 0 0 5px var(--pink-soft),0 0 18px 4px var(--glow);
+    transition:transform .6s .5s cubic-bezier(.3,1.6,.5,1);z-index:3;
+  }
+  .memory.in .dot{transform:translate(-50%,-50%) scale(1)}
+
+  /* the card: the little "square" */
+  .card{
+    position:relative;width:min(520px,46%);
+    display:flex;align-items:center;gap:22px;
+    background:#fff;
+    border:2px solid var(--pink-soft);
+    border-radius:26px 26px 26px 6px;
+    padding:26px 24px;
+    box-shadow:0 12px 34px rgba(255,111,165,.18);
+    cursor:pointer;
+    opacity:0;
+    transition:
+      transform .9s cubic-bezier(.2,.8,.2,1),
+      opacity .9s ease,
+      box-shadow .35s ease,
+      border-color .35s ease;
+  }
+  .memory.left .card{transform:translateX(-140px)}
+  .memory.right .card{transform:translateX(140px);flex-direction:row-reverse;border-radius:26px 26px 6px 26px}
+  .memory.in .card{opacity:1;transform:translateX(0)}
+
+  /* glow + zoom on interaction */
+  .memory.in .card:hover{
+    transform:scale(1.045);
+    border-color:var(--pink);
+    box-shadow:0 0 0 4px rgba(255,209,227,.7),0 0 42px 10px var(--glow);
+    transition-duration:.35s;
+  }
+  /* clicked: stays zoomed until you click again */
+  .memory.in .card.zoomed{
+    transform:scale(1.1);
+    z-index:6;
+    border-color:var(--pink);
+    box-shadow:0 0 0 5px rgba(255,209,227,.8),0 0 64px 18px var(--glow);
+    transition-duration:.35s;
+  }
+
+  .thumb{
+    flex:0 0 auto;width:152px;display:block;text-decoration:none;
+    border:6px solid #fff;border-radius:12px;
+    box-shadow:0 8px 22px rgba(20,10,16,.22),0 0 0 2px var(--pink-soft);
+    transform:rotate(-5deg);
+    transition:transform .4s cubic-bezier(.3,1.5,.5,1),box-shadow .4s ease;
+    position:relative;overflow:hidden;background:#fff;
+  }
+  .memory.right .thumb{transform:rotate(5deg)}
+  .thumb svg,.thumb img{display:block;width:100%;height:auto}
+  .thumb:hover,.thumb:focus-visible{
+    transform:rotate(0deg) scale(1.16);
+    box-shadow:0 0 0 3px var(--pink),0 0 34px 10px var(--glow);
+    z-index:4;outline:none;
+  }
+  .thumb .open{
+    position:absolute;right:6px;bottom:6px;
+    background:var(--black);color:var(--pink-soft);
+    font-size:.62rem;letter-spacing:.08em;padding:3px 8px;border-radius:999px;
+    opacity:0;transform:translateY(6px);transition:all .3s ease;
+  }
+  .thumb:hover .open,.thumb:focus-visible .open{opacity:1;transform:none}
+
+  .text{min-width:0}
+  .date{
+    display:inline-block;
+    font-weight:500;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+    color:#fff;padding:6px 15px;border-radius:999px;margin-bottom:14px;
+    background:linear-gradient(90deg,var(--pink),var(--pink-deep));
+    box-shadow:0 0 16px rgba(255,111,165,.55);
+  }
+  .text h3{
+    font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;
+    font-size:1.2rem;margin-bottom:8px;color:var(--black);
+  }
+  .text p{font-weight:300;line-height:1.75;font-size:.95rem;color:#3b2630}
+  .date.ink{color:var(--black)}
+  .hint{margin-top:12px;font-size:.72rem;color:var(--pink-deep);letter-spacing:.06em}
+
+  /* ripple on tap */
+  .ripple{
+    position:absolute;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(255,111,165,.45),transparent 70%);
+    transform:translate(-50%,-50%) scale(0);animation:rip .8s ease-out forwards;
+  }
+  @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+
+  /* photo placeholder (shows if the picture file isn't uploaded yet) */
+  .ph{
+    display:grid;place-items:center;text-align:center;
+    aspect-ratio:4/3;padding:14px;font-size:.75rem;line-height:1.4;
+    background:linear-gradient(135deg,var(--pink-mist),var(--pink-soft));color:var(--pink-deep);
+  }
+  .thumb:has(img){cursor:zoom-in}
+
+  /* full-screen photo viewer */
+  #lightbox{
+    position:fixed;inset:0;z-index:100;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    background:rgba(20,10,16,.88);cursor:zoom-out;
+  }
+  #lightbox.open{display:flex}
+  #lightbox img{
+    max-width:92vw;max-height:88vh;border-radius:14px;border:6px solid #fff;
+    box-shadow:0 0 0 3px var(--pink),0 0 70px 18px var(--glow);
+    animation:zoomIn .45s cubic-bezier(.2,1.2,.4,1);
+  }
+  @keyframes zoomIn{from{transform:scale(.4) rotate(-6deg);opacity:0}to{transform:none;opacity:1}}
+
+  /* end of timeline */
+  .more{text-align:center;padding:10px 0 80px;position:relative;z-index:2}
+  .more .heart{
+    display:inline-block;font-size:2rem;color:var(--pink);
+    animation:beat 1.6s ease-in-out infinite;text-shadow:0 0 22px var(--glow);
+  }
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.28)}30%{transform:scale(1)}45%{transform:scale(1.2)}}
+  .more p{margin-top:10px;font-weight:300;color:#6b4a58;font-size:.92rem}
+
+  footer{
+    background:var(--black);color:var(--pink-soft);text-align:center;
+    padding:34px 20px;font-size:.85rem;letter-spacing:.14em;font-weight:300;
+    position:relative;z-index:2;
+  }
+  footer b{color:var(--pink);font-weight:500}
+
+  /* ================= MOBILE ================= */
+  @media (max-width:760px){
+    .timeline::before{left:14px}
+    .memory .dot{left:14px}
+    .memory.left,.memory.right{justify-content:flex-end}
+    .card{width:calc(100% - 38px);flex-direction:column !important;text-align:center;padding:22px 18px}
+    .thumb{width:170px}
+    .memory.left .card{transform:translateX(-90px)}
+    .memory.right .card{transform:translateX(90px)}
+    .memory.in .card{transform:translateX(0)}
+    .memory.in .card:hover{transform:scale(1.03)}
+    .memory.in .card.zoomed{transform:scale(1.06)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;scroll-behavior:auto !important}
+    .card{transition:opacity .4s ease !important}
+    .memory.left .card,.memory.right .card{transform:none !important}
+  }
+</style>
+</head>
+
+<body>
+<div id="progress"></div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+  <p class="kicker">welcome</p>
+  <h1 class="hero-line" id="heroLine" aria-live="polite"></h1>
+  <button class="start-btn" id="startBtn">let's start</button>
+
+  <div class="waves" aria-hidden="true">
+    <svg class="w1" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#ffc2da" d="M0,60 C240,110 480,10 720,60 C960,110 1200,10 1440,60 C1680,110 1920,10 2160,60 C2400,110 2640,10 2880,60 L2880,120 L0,120 Z"/></svg>
+    <svg class="w2" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#ffd1e3" d="M0,75 C240,25 480,115 720,75 C960,25 1200,115 1440,75 C1680,25 1920,115 2160,75 C2400,25 2640,115 2880,75 L2880,120 L0,120 Z"/></svg>
+    <svg class="w3" viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#fffafc" d="M0,90 C240,60 480,120 720,90 C960,60 1200,120 1440,90 C1680,60 1920,120 2160,90 C2400,60 2640,120 2880,90 L2880,120 L0,120 Z"/></svg>
+  </div>
+</header>
+
+<!-- ================= MEMORIES ================= -->
+<main class="memories" id="memories">
+  <div class="section-title">
+    <h2>Our <span>little</span> memories</h2>
+    <p>tap anything that glows</p>
+  </div>
+  <div class="timeline" id="timeline"></div>
+  <div class="more">
+    <span class="heart">♥</span>
+    <p>more memories are on their way…</p>
+  </div>
+</main>
+
+<footer>made with <b>love</b> · only for the two of us</footer>
+
+<div id="lightbox" aria-hidden="true"><img alt="memory photo"></div>
+
+<script>
+/* =====================================================================
+   HOW TO ADD A NEW MEMORY LATER
+   ---------------------------------------------------------------------
+   1. Scroll to the MEMORIES list below.
+   2. Copy one whole { ... }, block and paste it at the bottom of the list
+      (just before the closing ];).
+   3. Change the date, title, message.
+   4. For a picture, use ONE of these:
+        thumbSrc: "photo.jpg"      -> a photo you uploaded to this repo
+        thumb: "pratishtha-site"   -> a drawn preview (see THUMBS below)
+      and add  link: "https://..."  if clicking the picture should open
+      something (a page, a video, anything).
+   Cards automatically alternate LEFT / RIGHT and slide in by themselves.
+   ===================================================================== */
+
+/* ---- wavy messages on the first screen (they rotate) ---- */
+const HERO_LINES = [
+  "hey, this is a peaceful place I built only for the two of us 🌸",
+  "no rush here, take all the time you want",
+  "every little moment gets to live here",
+  "ready? let's go through them together"
+];
+
+/* ---- ALL MEMORIES LIVE HERE ---- */
+const MEMORIES = [
+  {
+    date: "7th Jan 2026",
+    title: "A page, just for you",
+    message: "remember this little website made for the best person in the world? everything and every little memory means a lot to me. thank u so much for being there",
+    thumb: "pratishtha-site",
+    link: "https://ramgamer94510-cmyk.github.io/For-Pratishtha-/"
+  },
+  {
+    date: "the first card",
+    message: "the first time i made something for you just as a gesture of appreciation, from that one to i don't even know how many cards and stuff but it was all because i loved you so much and i always will...",
+    thumbSrc: "first-card.jpg"
+  },
+  {
+    date: "my birthday",
+    message: "i can't explain how much hope this one bracelet gave me during the time when i used to cry every single day...",
+    thumbSrc: "bracelet.jpg"
+  },
+  {
+    date: "numbskull yuvi",
+    message: "you're aware of this aren't you? me hurting myself over things i can't handle...",
+    thumbSrc: "memory4.jpg"
+  },
+  {
+    date: "paragraphs",
+    message: "countless paragraphs were also written by the both of us, and i saved yours every single time...",
+    thumbSrc: "memory5.jpg"
+  },
+  {
+    date: "problems",
+    message: "one of the many problems we had to face together and somehow we tried and fixed it all every single time, thank you so much",
+    thumbSrc: "memory6.jpg"
+  },
+  {
+    date: "her eyes",
+    message: "this one goes to the girl with the prettiest eyes in the world...i hope my drawing wasn't so bad",
+    thumbSrc: "memory7.jpg"
+  },
+  {
+    date: "HER",
+    ink: true,
+    message: "and this right here is the cuttest girl in the world, i hope everyone knows that",
+    thumbSrc: "memory8.jpg"
+  },
+  {
+    date: "bouquets...",
+    message: "ill always be greatful for these flowers, so thoughtful of you. Love you till death",
+    thumbSrc: "memory9.jpg"
+  },
+  {
+    date: "PRISHU'S BIRTHDAY",
+    message: "IT WAS HER BIRTHDAY AHAHAHAAA hope she liked wt i gave her...",
+    thumbSrc: "memory11.jpg"
+  },
+  {
+    date: "hugs",
+    message: "another  little but v cute thngg id say and it means a lot to me (close friends vali story)",
+    thumbSrc: "memory10.jpg"
+  }
+
+  /* ---- paste new memories below this line (don't forget the comma above!) ----
+  ,{
+    date: "dd Mon 2026",
+    title: "Title here",
+    message: "Your little message here.",
+    thumbSrc: "photo.jpg",
+    link: ""
+  }
+  */
+];
+
+/* ---- drawn preview pictures (used when a memory has  thumb: "name" ) ---- */
+const THUMBS = {
+  "pratishtha-site": (id) => `
+    <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Preview of the For Pratishtha page">
+      <defs>
+        <linearGradient id="g${id}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff0f6"/><stop offset="1" stop-color="#ffc2da"/>
+        </linearGradient>
+      </defs>
+      <rect width="220" height="160" fill="#fff"/>
+      <rect width="220" height="22" fill="#140a10"/>
+      <circle cx="14" cy="11" r="3.5" fill="#ff6fa5"/>
+      <circle cx="26" cy="11" r="3.5" fill="#ffd1e3"/>
+      <circle cx="38" cy="11" r="3.5" fill="#ffffff"/>
+      <rect x="54" y="5" width="150" height="12" rx="6" fill="#3a2430"/>
+      <text x="129" y="14" text-anchor="middle" font-size="7" fill="#ffd1e3" font-family="monospace">github.io/For-Pratishtha-</text>
+      <rect y="22" width="220" height="138" fill="url(#g${id})"/>
+      <path d="M110 56 C110 47 97 46 97 56 C97 64 110 72 110 72 C110 72 123 64 123 56 C123 46 110 47 110 56Z" fill="#ff6fa5"/>
+      <text x="110" y="93" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="17" fill="#140a10">For Pratishtha</text>
+      <text x="110" y="107" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.5" fill="#b03a6a">a small gentle place made just for you</text>
+      <g font-family="monospace" font-size="9" fill="#e0457f" text-anchor="middle">
+        <text x="110" y="123">(\\_/)</text>
+        <text x="110" y="133">(•‿•)</text>
+        <text x="110" y="143">(♥)</text>
+      </g>
+    </svg>`
+};
+
+/* ======================= engine (no need to edit) ======================= */
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* wavy hero text */
+const heroEl = document.getElementById('heroLine');
+function waveHTML(text){
+  let i = 0;
+  return text.split(' ').map(word =>
+    '<span class="word">' +
+    Array.from(word).map(ch => `<span class="wave" style="--i:${i++}">${esc(ch)}</span>`).join('') +
+    '</span>'
+  ).join(' ');
+}
+let heroIdx = 0;
+function showHero(){
+  heroEl.classList.add('fade');
+  setTimeout(() => {
+    heroEl.innerHTML = '<span>' + waveHTML(HERO_LINES[heroIdx]) + '</span>';
+    heroEl.classList.remove('fade');
+    heroIdx = (heroIdx + 1) % HERO_LINES.length;
+  }, heroEl.innerHTML ? 600 : 0);
+}
+showHero();
+setInterval(showHero, 5200);
+
+/* start button */
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('memories').scrollIntoView({behavior:'smooth'});
+});
+
+/* build memories */
+const timeline = document.getElementById('timeline');
+MEMORIES.forEach((m, idx) => {
+  const side = idx % 2 === 0 ? 'left' : 'right';
+
+  let thumbInner = '';
+  if (m.thumbSrc) thumbInner = `<img src="${esc(m.thumbSrc)}" alt="${esc(m.title || 'memory')}" onerror="this.outerHTML='<div class=&quot;ph&quot;>your photo goes here 🤍<br>(upload ${esc(m.thumbSrc)})</div>'">`;
+  else if (m.thumb && THUMBS[m.thumb]) thumbInner = THUMBS[m.thumb](idx);
+
+  let thumbHTML = '';
+  if (thumbInner){
+    thumbHTML = m.link
+      ? `<a class="thumb" href="${esc(m.link)}" target="_blank" rel="noopener" aria-label="Open: ${esc(m.title || 'memory')}">${thumbInner}<span class="open">open ↗</span></a>`
+      : `<div class="thumb">${thumbInner}</div>`;
+  }
+
+  const el = document.createElement('article');
+  el.className = `memory ${side}`;
+  el.innerHTML = `
+    <span class="dot"></span>
+    <div class="card">
+      ${thumbHTML}
+      <div class="text">
+        ${m.date ? `<span class="date${m.ink ? ' ink' : ''}">${esc(m.date)}</span>` : ''}
+        ${m.title ? `<h3>${esc(m.title)}</h3>` : ''}
+        <p>${esc(m.message)}</p>
+        ${m.link ? `<div class="hint">tap the picture to open ✦</div>` : ''}
+      </div>
+    </div>`;
+  timeline.appendChild(el);
+
+  /* tap on a card: zoom + glow + ripple */
+  const card = el.querySelector('.card');
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return;
+    const img = e.target.closest('.thumb img');
+    if (img) { openLightbox(img.src); return; }
+    const r = document.createElement('span');
+    r.className = 'ripple';
+    const b = card.getBoundingClientRect();
+    r.style.left = (e.clientX - b.left) + 'px';
+    r.style.top = (e.clientY - b.top) + 'px';
+    r.style.width = r.style.height = Math.max(b.width, b.height) * 1.6 + 'px';
+    card.appendChild(r);
+    setTimeout(() => r.remove(), 850);
+    const wasZoomed = card.classList.contains('zoomed');
+    document.querySelectorAll('.card.zoomed').forEach(c => c.classList.remove('zoomed'));
+    if (!wasZoomed) card.classList.add('zoomed');
+  });
+});
+
+/* click anywhere else to un-zoom */
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.card')) document.querySelectorAll('.card.zoomed').forEach(c => c.classList.remove('zoomed'));
+});
+
+/* full-screen photo viewer */
+const lb = document.getElementById('lightbox');
+function openLightbox(src){
+  lb.querySelector('img').src = src;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+}
+function closeLightbox(){
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+}
+lb.addEventListener('click', closeLightbox);
+addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+/* slide in when scrolled into view */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  });
+}, {threshold:0.25});
+document.querySelectorAll('.memory').forEach(el => io.observe(el));
+
+/* scroll progress bar */
+const bar = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - innerHeight;
+  bar.style.width = (h > 0 ? (scrollY / h) * 100 : 0) + '%';
+}, {passive:true});
+
+/* floating petals */
+for (let i = 0; i < 16; i++){
+  const p = document.createElement('span');
+  p.className = 'petal';
+  const s = 8 + Math.random() * 12;
+  p.style.cssText = `left:${Math.random()*100}vw;width:${s}px;height:${s}px;` +
+    `animation-duration:${10 + Math.random()*12}s;animation-delay:${-Math.random()*20}s;` +
+    `--drift:${(Math.random()*160-80).toFixed(0)}px`;
+  document.body.appendChild(p);
+}
+</script>
+</body>
+</html>
